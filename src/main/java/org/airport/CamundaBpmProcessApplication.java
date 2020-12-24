@@ -1,7 +1,4 @@
-package org.example;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.airport;
 
 import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
