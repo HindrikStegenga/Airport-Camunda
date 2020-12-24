@@ -29,24 +29,40 @@
   </bpmn:collaboration>
   <bpmn:process id="Process_1a8fblm" isExecutable="true">
     <bpmn:laneSet id="LaneSet_1vqofv9" />
-    <bpmn:sequenceFlow id="Flow_0z8n99e" name="No" sourceRef="Gateway_1nahf8l" targetRef="Activity_1s6i6t9" />
-    <bpmn:sequenceFlow id="Flow_0d9en8k" name="Yes" sourceRef="Gateway_1nahf8l" targetRef="Activity_0owxhxc" />
+    <bpmn:sequenceFlow id="Flow_0z8n99e" name="No" sourceRef="Gateway_1nahf8l" targetRef="Activity_1s6i6t9">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not FlightAvailable}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0d9en8k" name="Yes" sourceRef="Gateway_1nahf8l" targetRef="Activity_0owxhxc">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{FlightAvailable}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1e4go2e" sourceRef="Activity_1s6i6t9" targetRef="Gateway_1nahf8l" />
     <bpmn:sequenceFlow id="Flow_1xnlpxy" sourceRef="Activity_1q26is7" targetRef="Activity_1s6i6t9" />
     <bpmn:sequenceFlow id="Flow_0mbe4hc" sourceRef="StartEvent_1" targetRef="Activity_1q26is7" />
-    <bpmn:sequenceFlow id="Flow_1kqoclu" sourceRef="Gateway_0n8zpln" targetRef="Activity_1q26is7" />
+    <bpmn:sequenceFlow id="Flow_1kqoclu" sourceRef="Gateway_0n8zpln" targetRef="Activity_1q26is7">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{bookAnotherFlight}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10x0oxl" sourceRef="Activity_0owxhxc" targetRef="Activity_18vusau" />
     <bpmn:sequenceFlow id="Flow_1rkdngj" sourceRef="Activity_18vusau" targetRef="Event_1pgd5i4" />
     <bpmn:sequenceFlow id="Flow_16dv7kd" sourceRef="Activity_0wdjvvs" targetRef="Event_1233cec" />
     <bpmn:sequenceFlow id="Flow_10ecfyv" sourceRef="Event_1233cec" targetRef="Gateway_08brkk3" />
-    <bpmn:sequenceFlow id="Flow_10aod5i" sourceRef="Gateway_08brkk3" targetRef="Event_0hv0nkz" />
-    <bpmn:sequenceFlow id="Flow_05n2n5k" sourceRef="Gateway_08brkk3" targetRef="Gateway_0n8zpln" />
+    <bpmn:sequenceFlow id="Flow_10aod5i" sourceRef="Gateway_08brkk3" targetRef="Event_0hv0nkz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{PaymentStatus=="accepted"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_05n2n5k" sourceRef="Gateway_08brkk3" targetRef="Gateway_0n8zpln">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{PaymentStatus=="rejected"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_10dt2o4" sourceRef="Activity_1w47vid" targetRef="Activity_0wdjvvs" />
     <bpmn:sequenceFlow id="Flow_0yob78l" sourceRef="Event_0hv0nkz" targetRef="Event_04zbuc1" />
-    <bpmn:sequenceFlow id="Flow_00qv3sy" sourceRef="Gateway_0n8zpln" targetRef="Event_1ix4wcr" />
-    <bpmn:sequenceFlow id="Flow_0kguu8p" sourceRef="Event_1pgd5i4" targetRef="Gateway_02j6ozu" />
-    <bpmn:sequenceFlow id="Flow_0zrjdgs" name="Yes" sourceRef="Gateway_02j6ozu" targetRef="Activity_1w47vid" />
-    <bpmn:sequenceFlow id="Flow_13ol2wg" name="No" sourceRef="Gateway_02j6ozu" targetRef="Gateway_0n8zpln" />
+    <bpmn:sequenceFlow id="Flow_00qv3sy" name="No" sourceRef="Gateway_0n8zpln" targetRef="Event_1ix4wcr">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{ not bookAnotherFlight}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0kguu8p" sourceRef="Event_1pgd5i4" targetRef="Activity_1ge9lxg" />
+    <bpmn:sequenceFlow id="Flow_0zrjdgs" name="Yes" sourceRef="Gateway_02j6ozu" targetRef="Activity_1w47vid">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{confirm=='Yes'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_13ol2wg" name="No" sourceRef="Gateway_02j6ozu" targetRef="Gateway_0n8zpln">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{confirm=='No'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1f7e1ds" sourceRef="Event_04zbuc1" targetRef="Activity_00jgzpe" />
     <bpmn:sequenceFlow id="Flow_0vjepye" sourceRef="Activity_1safflh" targetRef="Activity_0klae37" />
     <bpmn:sequenceFlow id="Flow_18fcg6r" sourceRef="Activity_1lhosgk" targetRef="Activity_191cu2o" />
@@ -65,15 +81,36 @@
       <bpmn:incoming>Flow_0vjepye</bpmn:incoming>
       <bpmn:outgoing>Flow_1i7ugg6</bpmn:outgoing>
     </bpmn:receiveTask>
-    <bpmn:userTask id="Activity_1w47vid" name="Fill in payment details">
+    <bpmn:userTask id="Activity_1w47vid" name="Fill in payment details" camunda:formKey="Payment Details">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="Bank" label="Bank" type="string" />
+          <camunda:formField id="Accountdetails" label="Account details" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0zrjdgs</bpmn:incoming>
       <bpmn:outgoing>Flow_10dt2o4</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0owxhxc" name="Fill in personal details and preferences">
+    <bpmn:userTask id="Activity_0owxhxc" name="Fill in personal details and preferences" camunda:formKey="Personal Details" camunda:assignee="Customer">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="FirstName" label="First Name" type="string" />
+          <camunda:formField id="LastName" label="Last Name" type="string" />
+          <camunda:formField id="PassportNo" label="Passport Number" type="string" />
+          <camunda:formField id="ContactNo" label="Contact Number" type="string" />
+          <camunda:formField id="Email" label="Email" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0d9en8k</bpmn:incoming>
       <bpmn:outgoing>Flow_10x0oxl</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_1s6i6t9" name="Select flight date">
+    <bpmn:userTask id="Activity_1s6i6t9" name="Select flight date" camunda:assignee="Customer">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="FlightAvailable" label="Flight Available?" type="boolean" defaultValue="True" />
+          <camunda:formField id="Date" label="Date" type="date" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0z8n99e</bpmn:incoming>
       <bpmn:incoming>Flow_1xnlpxy</bpmn:incoming>
       <bpmn:outgoing>Flow_1e4go2e</bpmn:outgoing>
@@ -93,7 +130,7 @@
       <bpmn:outgoing>Flow_1kqoclu</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_02j6ozu" name="Proceed with the payment within 24 hours">
-      <bpmn:incoming>Flow_0kguu8p</bpmn:incoming>
+      <bpmn:incoming>Flow_0u9d5gq</bpmn:incoming>
       <bpmn:outgoing>Flow_0zrjdgs</bpmn:outgoing>
       <bpmn:outgoing>Flow_13ol2wg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -101,14 +138,14 @@
       <bpmn:incoming>Flow_0yob78l</bpmn:incoming>
       <bpmn:outgoing>Flow_1f7e1ds</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0kvaij3">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">2</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression" />
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Activity_0wdjvvs" name="Send payment request" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_0wdjvvs" name="Send payment request" camunda:class="org.airport.sendPaymentRequestDelegate">
       <bpmn:incoming>Flow_10dt2o4</bpmn:incoming>
       <bpmn:outgoing>Flow_16dv7kd</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:intermediateCatchEvent id="Event_0hv0nkz" name="Receive payment details">
+    <bpmn:intermediateCatchEvent id="Event_0hv0nkz" name="Receive booking confirmation">
       <bpmn:incoming>Flow_10aod5i</bpmn:incoming>
       <bpmn:outgoing>Flow_0yob78l</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1nnuqf9" messageRef="Message_0exa37g" />
@@ -123,15 +160,10 @@
       <bpmn:outgoing>Flow_10ecfyv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0poseol" messageRef="Message_0mxxttl" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Activity_18vusau" name="Send flight request to flight company" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_18vusau" name="Send flight request to flight company" camunda:class="org.airport.sendFlightRequestDelegate">
       <bpmn:incoming>Flow_10x0oxl</bpmn:incoming>
       <bpmn:outgoing>Flow_1rkdngj</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:intermediateCatchEvent id="Event_1pgd5i4" name="Wait for payment details">
-      <bpmn:incoming>Flow_1rkdngj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0kguu8p</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0dtguc9" messageRef="Message_0mxxttl" />
-    </bpmn:intermediateCatchEvent>
     <bpmn:startEvent id="StartEvent_1" name="User needs to travel by airplane">
       <bpmn:outgoing>Flow_0mbe4hc</bpmn:outgoing>
     </bpmn:startEvent>
@@ -154,7 +186,7 @@
       <bpmn:incoming>Flow_0p7n8vy</bpmn:incoming>
       <bpmn:outgoing>Flow_0fvrjfk</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:receiveTask id="Activity_1lhosgk" name="Receive Boarding pass">
+    <bpmn:receiveTask id="Activity_1lhosgk" name="Receive Boarding pass" messageRef="Message_1p5nmoj">
       <bpmn:incoming>Flow_0g1bgzs</bpmn:incoming>
       <bpmn:outgoing>Flow_18fcg6r</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -162,20 +194,20 @@
       <bpmn:incoming>Flow_0h58rmm</bpmn:incoming>
       <bpmn:outgoing>Flow_0hco0h3</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:intermediateCatchEvent id="Event_1vhjjan">
+    <bpmn:intermediateCatchEvent id="Event_1vhjjan" name="foreign substance detected">
       <bpmn:outgoing>Flow_07lersw</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0bqh48w" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_07lersw" sourceRef="Event_1vhjjan" targetRef="Event_0u3hw52" />
     <bpmn:endEvent id="Event_0u3hw52" name="Customer is being detained">
       <bpmn:incoming>Flow_07lersw</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1oz4b22" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1oz4b22" errorRef="Error_0x336wi" />
     </bpmn:endEvent>
     <bpmn:endEvent id="Event_1xgl321" name="Customer cannot procees with the flight">
       <bpmn:incoming>Flow_1c33uba</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1k5r27o" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1k5r27o" errorRef="Error_073wiof" />
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1c33uba" sourceRef="Event_0eothuc" targetRef="Event_1xgl321" />
+    <bpmn:sequenceFlow id="Flow_1c33uba" sourceRef="InvalidPassportVisa" targetRef="Event_1xgl321" />
     <bpmn:sequenceFlow id="Flow_0g1bgzs" sourceRef="Activity_0wg91ve" targetRef="Activity_1lhosgk" />
     <bpmn:manualTask id="Activity_191cu2o" name="Walk to passport control">
       <bpmn:incoming>Flow_18fcg6r</bpmn:incoming>
@@ -185,7 +217,7 @@
       <bpmn:incoming>Flow_0p6h8nf</bpmn:incoming>
       <bpmn:outgoing>Flow_0h58rmm</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:intermediateCatchEvent id="Event_0eothuc">
+    <bpmn:intermediateCatchEvent id="InvalidPassportVisa" name="Invalid passport/ visa details">
       <bpmn:outgoing>Flow_1c33uba</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0q63fjw" />
     </bpmn:intermediateCatchEvent>
@@ -254,6 +286,21 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">2</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0u9d5gq" sourceRef="Activity_1ge9lxg" targetRef="Gateway_02j6ozu" />
+    <bpmn:intermediateCatchEvent id="Event_1pgd5i4" name="Wait for payment details">
+      <bpmn:incoming>Flow_1rkdngj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kguu8p</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0dtguc9" messageRef="Message_0mxxttl" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:userTask id="Activity_1ge9lxg" name="Confirm if User wants to pay" camunda:formKey="Confirm">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="confirm" label="Do you want to Proceed with Payment?" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0kguu8p</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u9d5gq</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmn:process id="Process_0p86xzy" isExecutable="false">
     <bpmn:startEvent id="Event_14h30f2" name="Payment requested">
@@ -269,18 +316,22 @@
       <bpmn:incoming>Flow_10bjum9</bpmn:incoming>
       <bpmn:outgoing>Flow_1ay2ip6</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sendTask id="Activity_08zhjix" name="Reject payment request" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_08zhjix" name="Reject payment request" camunda:class="org.airport.rejectPaymentRequestDelegate">
       <bpmn:incoming>Flow_0lrlqgr</bpmn:incoming>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_09gisqx" name="Confirm successfull payment" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_09gisqx" name="Confirm successfull payment" camunda:class="org.airport.acceptPaymentRequestDelegate">
       <bpmn:incoming>Flow_1ay2ip6</bpmn:incoming>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ay2ip6" sourceRef="Activity_1mvspv0" targetRef="Activity_09gisqx" />
-    <bpmn:sequenceFlow id="Flow_0lrlqgr" name="No" sourceRef="Gateway_0qxsn27" targetRef="Activity_08zhjix" />
-    <bpmn:sequenceFlow id="Flow_10bjum9" name="Yes" sourceRef="Gateway_0qxsn27" targetRef="Activity_1mvspv0" />
+    <bpmn:sequenceFlow id="Flow_0lrlqgr" name="No" sourceRef="Gateway_0qxsn27" targetRef="Activity_08zhjix">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{enoughFunds=="no"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_10bjum9" name="Yes" sourceRef="Gateway_0qxsn27" targetRef="Activity_1mvspv0">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{enoughFunds=="yes"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0c0eba3" sourceRef="Activity_0bevpus" targetRef="Gateway_0qxsn27" />
     <bpmn:sequenceFlow id="Flow_1dnskqg" sourceRef="Event_14h30f2" targetRef="Activity_0bevpus" />
-    <bpmn:serviceTask id="Activity_0bevpus" name="Retrieve customer and flight company data" camunda:class="">
+    <bpmn:serviceTask id="Activity_0bevpus" name="Retrieve customer and flight company data" camunda:class="org.airport.retrieveCustomerFlightCompanyDataDelegate">
       <bpmn:incoming>Flow_1dnskqg</bpmn:incoming>
       <bpmn:outgoing>Flow_0c0eba3</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -346,10 +397,14 @@
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:sequenceFlow id="Flow_0rfmpkf" sourceRef="Activity_1ic3688" targetRef="Activity_1lpntmu" />
-    <bpmn:sequenceFlow id="Flow_16mx9t6" name="Yes" sourceRef="Gateway_1k5rzdb" targetRef="Activity_1aqpmb7" />
+    <bpmn:sequenceFlow id="Flow_16mx9t6" name="Yes" sourceRef="Gateway_1k5rzdb" targetRef="Activity_1aqpmb7">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{PaymentStatus=="accepted"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0ya75pe" sourceRef="Event_00gpac6" targetRef="Activity_1sfkh9d" />
     <bpmn:sequenceFlow id="Flow_1frtmly" sourceRef="Activity_1sfkh9d" targetRef="Gateway_13ypmiy" />
-    <bpmn:sequenceFlow id="Flow_07ddzka" name="No" sourceRef="Gateway_1k5rzdb" targetRef="Event_0rmsd9a" />
+    <bpmn:sequenceFlow id="Flow_07ddzka" name="No" sourceRef="Gateway_1k5rzdb" targetRef="Event_0rmsd9a">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{PaymentStatus=="rejected"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0zraur1" sourceRef="Event_0s6zg94" targetRef="Event_0rmsd9a" />
     <bpmn:sequenceFlow id="Flow_16f4khz" sourceRef="Gateway_13ypmiy" targetRef="Event_1g2uh3z" />
     <bpmn:sequenceFlow id="Flow_0xy3a2b" sourceRef="Event_1g2uh3z" targetRef="Gateway_1k5rzdb" />
@@ -469,11 +524,11 @@
       <bpmn:incoming>Flow_0zraur1</bpmn:incoming>
       <bpmn:incoming>Flow_07ddzka</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_1sfkh9d" name="Send Payment details" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_1sfkh9d" name="Send Payment details" camunda:class="org.airport.sendPaymentDetailsDelegate">
       <bpmn:incoming>Flow_0ya75pe</bpmn:incoming>
       <bpmn:outgoing>Flow_1frtmly</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_1aqpmb7" name="Confirm booking" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_1aqpmb7" name="Confirm booking" camunda:class="org.airport.sendBookingConfirmationDelegate">
       <bpmn:incoming>Flow_16mx9t6</bpmn:incoming>
       <bpmn:outgoing>Flow_11txz2p</bpmn:outgoing>
     </bpmn:sendTask>
@@ -580,14 +635,17 @@
     </bpmn:manualTask>
     <bpmn:sequenceFlow id="Flow_09w4gs2" sourceRef="Event_0wzkui4" targetRef="Activity_0s7lfyi" />
   </bpmn:process>
-  <bpmn:message id="Message_0mxxttl" name="Payment Status" />
+  <bpmn:message id="Message_0mxxttl" name="PaymentDetails" />
   <bpmn:message id="Message_001vnrr" name="Receive Documents" />
-  <bpmn:message id="Message_1bjcbv6" name="Payment Request" />
-  <bpmn:message id="Message_1gzj79g" name="Payment Confirmation" />
-  <bpmn:message id="Message_187479t" name="Flight Request" />
+  <bpmn:message id="Message_1bjcbv6" name="PaymentRequest" />
+  <bpmn:message id="Message_1gzj79g" name="PaymentConfirmation" />
+  <bpmn:message id="Message_187479t" name="FlightRequest" />
   <bpmn:message id="Message_14b4ek1" name="Customer Ticket and Passport" />
   <bpmn:message id="Message_1vvpklz" name="Customer Passport and Visa" />
-  <bpmn:message id="Message_0exa37g" name="Payment Details" />
+  <bpmn:message id="Message_0exa37g" name="bookingConfirmation" />
+  <bpmn:message id="Message_1p5nmoj" name="boarding pass" />
+  <bpmn:error id="Error_073wiof" name="cannot proceed" />
+  <bpmn:error id="Error_0x336wi" name="customer detain" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0mvb6fe">
       <bpmndi:BPMNShape id="Participant_13n413u_di" bpmnElement="Participant_13n413u" isHorizontal="true">
@@ -702,13 +760,17 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0kguu8p_di" bpmnElement="Flow_0kguu8p">
-        <di:waypoint x="1108" y="660" />
-        <di:waypoint x="1175" y="660" />
+        <di:waypoint x="1090" y="678" />
+        <di:waypoint x="1090" y="770" />
+        <di:waypoint x="1110" y="770" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_00qv3sy_di" bpmnElement="Flow_00qv3sy">
         <di:waypoint x="1650" y="474" />
         <di:waypoint x="1650" y="429" />
         <di:waypoint x="1802" y="429" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1658" y="449" width="15" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0yob78l_di" bpmnElement="Flow_0yob78l">
         <di:waypoint x="1928" y="660" />
@@ -776,6 +838,10 @@
           <dc:Bounds x="638" y="683" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u9d5gq_di" bpmnElement="Flow_0u9d5gq">
+        <di:waypoint x="1200" y="730" />
+        <di:waypoint x="1200" y="685" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1ejthb9_di" bpmnElement="Activity_02xdle9">
         <dc:Bounds x="3960" y="620" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -812,7 +878,7 @@
       <bpmndi:BPMNShape id="Gateway_02j6ozu_di" bpmnElement="Gateway_02j6ozu" isMarkerVisible="true">
         <dc:Bounds x="1175" y="635" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1156" y="692" width="89" height="40" />
+          <dc:Bounds x="1204.5" y="680" width="89" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1t5hd1m_di" bpmnElement="Event_04zbuc1">
@@ -827,7 +893,7 @@
       <bpmndi:BPMNShape id="Event_0li91j8_di" bpmnElement="Event_0hv0nkz">
         <dc:Bounds x="1892" y="642" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1868" y="605" width="85" height="27" />
+          <dc:Bounds x="1870" y="605" width="82" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_08brkk3_di" bpmnElement="Gateway_08brkk3" isMarkerVisible="true">
@@ -844,12 +910,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0b8a8uq_di" bpmnElement="Activity_18vusau">
         <dc:Bounds x="930" y="620" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0bafskw_di" bpmnElement="Event_1pgd5i4">
-        <dc:Bounds x="1072" y="642" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1048" y="605" width="83" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="222" y="642" width="36" height="36" />
@@ -880,6 +940,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_15uqswe_di" bpmnElement="Event_1vhjjan">
         <dc:Bounds x="4459" y="600" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4496" y="576" width="87" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_111m1ct_di" bpmnElement="Event_0u3hw52">
         <dc:Bounds x="4459" y="512" width="36" height="36" />
@@ -899,8 +962,11 @@
       <bpmndi:BPMNShape id="Activity_14f6hnb_di" bpmnElement="Activity_0atxbih">
         <dc:Bounds x="4250" y="620" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_042a3q9_di" bpmnElement="Event_0eothuc">
+      <bpmndi:BPMNShape id="Event_042a3q9_di" bpmnElement="InvalidPassportVisa">
         <dc:Bounds x="3992" y="598" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="4019" y="586" width="81" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1fzvnb1_di" bpmnElement="Activity_0wg91ve">
         <dc:Bounds x="3170" y="620" width="100" height="80" />
@@ -952,6 +1018,15 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="5657" y="685" width="67" height="40" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bafskw_di" bpmnElement="Event_1pgd5i4">
+        <dc:Bounds x="1072" y="642" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1048.5" y="616" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mbd4je_di" bpmnElement="Activity_1ge9lxg">
+        <dc:Bounds x="1110" y="730" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_0jpok0m_di" bpmnElement="Participant_0jpok0m" isHorizontal="true">
         <dc:Bounds x="750" y="60" width="870" height="280" />
