@@ -178,7 +178,7 @@
     </bpmn:manualTask>
     <bpmn:sequenceFlow id="Flow_0p7n8vy" sourceRef="Activity_00jgzpe" targetRef="Activity_1rofumj" />
     <bpmn:sequenceFlow id="Flow_0fvrjfk" sourceRef="Activity_1rofumj" targetRef="Activity_1safflh" />
-    <bpmn:sendTask id="Activity_1safflh" name="Hand over the required documents" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_1safflh" name="Hand over the required documents" camunda:class="org.airport.handOverDocumentsDelegate">
       <bpmn:incoming>Flow_0fvrjfk</bpmn:incoming>
       <bpmn:outgoing>Flow_0vjepye</bpmn:outgoing>
     </bpmn:sendTask>
@@ -464,7 +464,7 @@
       <bpmn:incoming>Flow_17zrdvz</bpmn:incoming>
       <bpmn:outgoing>Flow_02uxy2n</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sendTask id="Activity_16f7bhd" name="Hand over documents to customer" camunda:class="org.airport.sendmessageDelegate">
+    <bpmn:sendTask id="Activity_16f7bhd" name="Hand over documents to customer" camunda:class="org.airport.handOverDocumentsDelegate">
       <bpmn:incoming>Flow_1lklv39</bpmn:incoming>
       <bpmn:incoming>Flow_1phymct</bpmn:incoming>
       <bpmn:outgoing>Flow_1kto6fd</bpmn:outgoing>
@@ -640,7 +640,7 @@
   <bpmn:message id="Message_1bjcbv6" name="PaymentRequest" />
   <bpmn:message id="Message_1gzj79g" name="PaymentConfirmation" />
   <bpmn:message id="Message_187479t" name="FlightRequest" />
-  <bpmn:message id="Message_14b4ek1" name="Customer Ticket and Passport" />
+  <bpmn:message id="Message_14b4ek1" name="CustomerTicketandPassport" />
   <bpmn:message id="Message_1vvpklz" name="Customer Passport and Visa" />
   <bpmn:message id="Message_0exa37g" name="bookingConfirmation" />
   <bpmn:message id="Message_1p5nmoj" name="boarding pass" />
