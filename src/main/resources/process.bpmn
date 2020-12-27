@@ -141,7 +141,7 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression" />
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Activity_0wdjvvs" name="Send payment request" camunda:class="org.airport.sendPaymentRequestDelegate">
+    <bpmn:sendTask id="Activity_0wdjvvs" name="Send payment request" camunda:class="org.airport.Customer.SendPaymentRequestDelegate">
       <bpmn:incoming>Flow_10dt2o4</bpmn:incoming>
       <bpmn:outgoing>Flow_16dv7kd</bpmn:outgoing>
     </bpmn:sendTask>
@@ -160,7 +160,7 @@
       <bpmn:outgoing>Flow_10ecfyv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0poseol" messageRef="Message_0mxxttl" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sendTask id="Activity_18vusau" name="Send flight request to flight company" camunda:class="org.airport.sendFlightRequestDelegate">
+    <bpmn:sendTask id="Activity_18vusau" name="Send flight request to flight company" camunda:class="org.airport.Customer.SendFlightRequestDelegate">
       <bpmn:incoming>Flow_10x0oxl</bpmn:incoming>
       <bpmn:outgoing>Flow_1rkdngj</bpmn:outgoing>
     </bpmn:sendTask>
@@ -316,10 +316,10 @@
       <bpmn:incoming>Flow_10bjum9</bpmn:incoming>
       <bpmn:outgoing>Flow_1ay2ip6</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sendTask id="Activity_08zhjix" name="Reject payment request" camunda:class="org.airport.rejectPaymentRequestDelegate">
+    <bpmn:sendTask id="Activity_08zhjix" name="Reject payment request" camunda:class="org.airport.Bank.RejectPaymentRequestDelegate">
       <bpmn:incoming>Flow_0lrlqgr</bpmn:incoming>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_09gisqx" name="Confirm successfull payment" camunda:class="org.airport.acceptPaymentRequestDelegate">
+    <bpmn:sendTask id="Activity_09gisqx" name="Confirm successfull payment" camunda:class="org.airport.Bank.AcceptPaymentRequestDelegate">
       <bpmn:incoming>Flow_1ay2ip6</bpmn:incoming>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_1ay2ip6" sourceRef="Activity_1mvspv0" targetRef="Activity_09gisqx" />
@@ -331,7 +331,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0c0eba3" sourceRef="Activity_0bevpus" targetRef="Gateway_0qxsn27" />
     <bpmn:sequenceFlow id="Flow_1dnskqg" sourceRef="Event_14h30f2" targetRef="Activity_0bevpus" />
-    <bpmn:serviceTask id="Activity_0bevpus" name="Retrieve customer and flight company data" camunda:class="org.airport.retrieveCustomerFlightCompanyDataDelegate">
+    <bpmn:serviceTask id="Activity_0bevpus" name="Retrieve customer and flight company data" camunda:class="org.airport.Bank.RetrieveCustomerFlightCompanyDataDelegate">
       <bpmn:incoming>Flow_1dnskqg</bpmn:incoming>
       <bpmn:outgoing>Flow_0c0eba3</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -524,11 +524,11 @@
       <bpmn:incoming>Flow_0zraur1</bpmn:incoming>
       <bpmn:incoming>Flow_07ddzka</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Activity_1sfkh9d" name="Send Payment details" camunda:class="org.airport.sendPaymentDetailsDelegate">
+    <bpmn:sendTask id="Activity_1sfkh9d" name="Send Payment details" camunda:class="org.airport.TicketBookingSystem.SendPaymentDetailsDelegate">
       <bpmn:incoming>Flow_0ya75pe</bpmn:incoming>
       <bpmn:outgoing>Flow_1frtmly</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sendTask id="Activity_1aqpmb7" name="Confirm booking" camunda:class="org.airport.sendBookingConfirmationDelegate">
+    <bpmn:sendTask id="Activity_1aqpmb7" name="Confirm booking" camunda:class="org.airport.TicketBookingSystem.SendBookingConfirmationDelegate">
       <bpmn:incoming>Flow_16mx9t6</bpmn:incoming>
       <bpmn:outgoing>Flow_11txz2p</bpmn:outgoing>
     </bpmn:sendTask>
