@@ -63,7 +63,7 @@
       <bpmn:incoming>Flow_1tnl2l0</bpmn:incoming>
       <bpmn:outgoing>Flow_078w105</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:userTask id="Activity_0owxhxc" name="Fill in personal details and preferences" camunda:formKey="Personal Details" camunda:assignee="Customer">
+    <bpmn:userTask id="Activity_0owxhxc" name="Fill in personal details and preferences" camunda:assignee="Customer">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FirstName" label="First Name" type="string" />
