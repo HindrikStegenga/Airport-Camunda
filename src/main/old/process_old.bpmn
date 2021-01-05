@@ -445,7 +445,7 @@
       <bpmn:incoming>Flow_11txz2p</bpmn:incoming>
       <bpmn:outgoing>Flow_08z3x0y</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:serviceTask id="Activity_00v5aah" name="Inspect customer ticket" camunda:class="org.airport.CheckInDesk.VerifyPassportIdentity">
+    <bpmn:serviceTask id="Activity_00v5aah" name="Inspect customer ticket" camunda:class="org.airport.CheckInDesk.CheckLuggage">
       <bpmn:incoming>Flow_069zoau</bpmn:incoming>
       <bpmn:outgoing>Flow_1n3oy7q</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -457,7 +457,7 @@
       <bpmn:incoming>Flow_1o4pokk</bpmn:incoming>
       <bpmn:signalEventDefinition id="SignalEventDefinition_0siyeis" signalRef="Signal_0irj60j" />
     </bpmn:intermediateThrowEvent>
-    <bpmn:serviceTask id="Activity_18rom3b" name="Check customer ticket" camunda:class="org.airport.CheckInDesk.CheckCustomerTicket">
+    <bpmn:serviceTask id="Activity_18rom3b" name="Check customer ticket" camunda:class="org.airport.CheckInDesk.FlightOverbooked">
       <bpmn:incoming>Flow_1n3oy7q</bpmn:incoming>
       <bpmn:outgoing>Flow_1tyha8u</bpmn:outgoing>
     </bpmn:serviceTask>
