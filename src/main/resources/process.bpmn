@@ -291,11 +291,6 @@
     <bpmn:sequenceFlow id="Flow_0l2b6tk" sourceRef="Gateway_0iasei4" targetRef="Event_1ijtatu" />
     <bpmn:sequenceFlow id="Flow_1687ib5" sourceRef="Gateway_0iasei4" targetRef="Gateway_0p2pdfo" />
     <bpmn:sequenceFlow id="Flow_05b8713" sourceRef="Activity_08zxe1p" targetRef="Activity_06a1it2" />
-    <bpmn:userTask id="Task_0o2xovx" name="Go to booking site" camunda:candidateGroups="Customers">
-      <bpmn:incoming>Flow_1a30z6s</bpmn:incoming>
-      <bpmn:incoming>Flow_0axxoym</bpmn:incoming>
-      <bpmn:outgoing>Flow_1rgp2n6</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:dataObjectReference id="DataObjectReference_18n7asa" name="Flight Documents (Passport, boarding pass, visa)" dataObjectRef="DataObject_1n238zy" />
     <bpmn:dataObject id="DataObject_1n238zy" />
     <bpmn:endEvent id="Event_1ov4cs4" name="User cannot book flight">
@@ -303,6 +298,11 @@
       <bpmn:incoming>Flow_1ujbtep</bpmn:incoming>
       <bpmn:terminateEventDefinition id="TerminateEventDefinition_1bu3amo" />
     </bpmn:endEvent>
+    <bpmn:manualTask id="Task_0o2xovx" name="Go to booking site">
+      <bpmn:incoming>Flow_1a30z6s</bpmn:incoming>
+      <bpmn:incoming>Flow_0axxoym</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rgp2n6</bpmn:outgoing>
+    </bpmn:manualTask>
     <bpmn:textAnnotation id="TextAnnotation_0a2drja">
       <bpmn:text>Flight documents includes for example boarding pass, booking confirmation, refund policy etc.</bpmn:text>
     </bpmn:textAnnotation>
@@ -989,9 +989,6 @@
       <bpmndi:BPMNShape id="Activity_1ft76m0_di" bpmnElement="Activity_1outjqf">
         <dc:Bounds x="980" y="708" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_1audvzq_di" bpmnElement="Task_0o2xovx">
-        <dc:Bounds x="330" y="708" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_18n7asa_di" bpmnElement="DataObjectReference_18n7asa">
         <dc:Bounds x="2252" y="815" width="36" height="50" />
         <bpmndi:BPMNLabel>
@@ -1006,6 +1003,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0a2drja_di" bpmnElement="TextAnnotation_0a2drja">
         <dc:Bounds x="2020" y="480" width="100" height="138" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ajy7fv_di" bpmnElement="Task_0o2xovx">
+        <dc:Bounds x="330" y="708" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0aerltu_di" bpmnElement="Event_1lyzdqw">
         <dc:Bounds x="1872" y="690" width="36" height="36" />
@@ -1027,9 +1027,14 @@
       <bpmndi:BPMNShape id="Lane_1qcqezy_di" bpmnElement="Lane_1qcqezy" isHorizontal="true">
         <dc:Bounds x="452" y="1017" width="2328" height="265" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0i9f3ih_di" bpmnElement="TextAnnotation_0i9f3ih">
-        <dc:Bounds x="1320" y="1298" width="100" height="68" />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1otxjoo_di" bpmnElement="Flow_1otxjoo">
+        <di:waypoint x="1420" y="1432" />
+        <di:waypoint x="1450" y="1432" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dem9qt_di" bpmnElement="Flow_0dem9qt">
+        <di:waypoint x="1278" y="1432" />
+        <di:waypoint x="1320" y="1432" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ik68ps_di" bpmnElement="Flow_1ik68ps">
         <di:waypoint x="1148" y="1142" />
         <di:waypoint x="1200" y="1142" />
@@ -1124,14 +1129,6 @@
       <bpmndi:BPMNEdge id="Flow_1utj351_di" bpmnElement="Flow_1utj351">
         <di:waypoint x="1810" y="1332" />
         <di:waypoint x="1768" y="1332" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0dem9qt_di" bpmnElement="Flow_0dem9qt">
-        <di:waypoint x="1278" y="1432" />
-        <di:waypoint x="1320" y="1432" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1otxjoo_di" bpmnElement="Flow_1otxjoo">
-        <di:waypoint x="1420" y="1432" />
-        <di:waypoint x="1450" y="1432" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1csb46a_di" bpmnElement="Event_0kesjcd">
         <dc:Bounds x="902" y="1074" width="36" height="36" />
@@ -1235,9 +1232,6 @@
           <dc:Bounds x="1229" y="1103" width="84" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_13sxzze_di" bpmnElement="TextAnnotation_13sxzze">
-        <dc:Bounds x="1020" y="1030" width="100" height="68" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_19u7p6b_di" bpmnElement="Activity_014k6l9">
         <dc:Bounds x="1450" y="1392" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -1250,10 +1244,12 @@
           <dc:Bounds x="1223" y="1457" width="76" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1dueejv_di" bpmnElement="Association_1dueejv">
-        <di:waypoint x="1370" y="1392" />
-        <di:waypoint x="1370" y="1366" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_13sxzze_di" bpmnElement="TextAnnotation_13sxzze">
+        <dc:Bounds x="1020" y="1030" width="100" height="68" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0i9f3ih_di" bpmnElement="TextAnnotation_0i9f3ih">
+        <dc:Bounds x="1320" y="1298" width="100" height="68" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_03kbuyz_di" bpmnElement="Event_1akojbw">
         <dc:Bounds x="1612" y="1374" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -1275,6 +1271,10 @@
       <bpmndi:BPMNEdge id="Association_03306md_di" bpmnElement="Association_03306md">
         <di:waypoint x="937" y="1087" />
         <di:waypoint x="1020" y="1061" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1dueejv_di" bpmnElement="Association_1dueejv">
+        <di:waypoint x="1370" y="1392" />
+        <di:waypoint x="1370" y="1366" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1f81a56_di" bpmnElement="Participant_1f81a56" isHorizontal="true">
         <dc:Bounds x="1080" y="100" width="708" height="280" />
