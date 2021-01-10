@@ -1,5 +1,6 @@
 package org.airport.CheckInDesk;
 
+import org.airport.Customer.CheckInScopeVariables;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -7,11 +8,14 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 public class FlightOverbooked implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-//        String flightAttendance = (String) execution.getVariable("flightAttendance");
-//        String flightCapacity = (String) execution.getVariable("flightCapacity");
-//
-//        if (flightAttendance == flightCapacity) {
-//            throw new BpmnError("flightOverbooked");
-//        }
+        if (!execution.hasVariable(CheckInScopeVariables.FLIGHT_OVERBOOKED)) {
+            throw new Exception("Incorrect setup!");
+        }
+        Boolean flightOverbooked = (Boolean) execution.getVariable(CheckInScopeVariables.FLIGHT_OVERBOOKED);
+        if (flightOverbooked) {
+            throw new BpmnError("flightOverbooked");
+        } else {
+            return;
+        }
     }
 }
